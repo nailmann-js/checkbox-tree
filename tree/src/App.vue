@@ -52,23 +52,21 @@ export default class extends Vue {
   ]
 
   get listToTree (): ModUserRights[] {
-    const list: ModUserRights[] = this.data.map((item) => {
+    const nodes: ModUserRights[] = this.data.map((item) => {
       return { ...item, children: [] }
     })
     const map: { [key: string]: number } = {}
-    let node: ModUserRights
     const roots: ModUserRights[] = []
-    for (let i = 0; i < list.length; i += 1) {
-      map[list[i].id] = i
-    }
-    for (let i = 0; i < list.length; i += 1) {
-      node = list[i]
+    nodes.forEach((node, i) => {
+      map[node.id] = i
+    })
+    nodes.forEach((node, i) => {
       if (node.parentId !== 0) {
-        list[map[node.parentId]].children.push(node)
+        nodes[map[node.parentId]].children.push(node)
       } else {
         roots.push(node)
       }
-    }
+    })
     return roots
   }
 }
